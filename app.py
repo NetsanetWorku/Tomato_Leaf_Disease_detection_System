@@ -26,9 +26,7 @@ MODELS_DIR   = "models"
 MODEL_FILE   = "custom_cnn_best.h5"
 
 # Google Drive file ID for the trained model.
-# Set the GDRIVE_MODEL_ID environment variable on Render (or any host),
-# or hard-code it here after uploading the model to Google Drive.
-GDRIVE_MODEL_ID = os.environ.get("GDRIVE_MODEL_ID", "")
+GDRIVE_MODEL_ID = os.environ.get("GDRIVE_MODEL_ID", "1V0vTuJDdhSpS4oNbRDRwFgS2--tValzn")
 
 # ─── Model Download ───────────────────────────────────────────────────────────
 
@@ -45,7 +43,7 @@ def download_model_if_missing():
 
     print(f"Model not found locally. Downloading from Google Drive (id={GDRIVE_MODEL_ID})...")
     os.makedirs(MODELS_DIR, exist_ok=True)
-    url = f"https://drive.google.com/uc?id={GDRIVE_MODEL_ID}"
+    url = f"https://drive.google.com/uc?id={GDRIVE_MODEL_ID}&export=download"
     try:
         gdown.download(url, model_path, quiet=False, fuzzy=True)
         print("Model downloaded successfully.")
