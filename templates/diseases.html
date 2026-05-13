@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Reference — Tomato Disease Detector{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="page-header">
+    <h1>Tomato Leaf Disease Reference</h1>
+    <p class="page-subtitle">10 classes detected by the AI model</p>
+  </div>
+
+  <div class="disease-grid">
+    {% for key, info in diseases.items() %}
+    <div class="disease-card {% if info.severity == 'High' %}severity-high{% elif info.severity == 'Moderate' %}severity-moderate{% else %}severity-none{% endif %}">
+      <div class="disease-card-header">
+        <h3>{{ info.display }}</h3>
+        <span class="severity-pill severity-{{ info.severity | lower }}">{{ info.severity }}</span>
+      </div>
+      <p class="disease-description">{{ info.description }}</p>
+      <div class="disease-treatment">
+        <strong>Treatment:</strong>
+        <p>{{ info.treatment }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}TomatoAI — AI-Based Tomato Leaf Disease Detection{% endblock %}
+{% block main_class %}home-main{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<section class="home-hero">
+  <div class="home-hero-inner">
+    <div class="home-hero-content">
+      <div class="home-hero-badge">🌿 Powered by Deep Learning</div>
+      <h1 class="home-hero-title">
+        Detect Tomato Leaf Diseases
+        <span class="home-hero-accent">Instantly with AI</span>
+      </h1>
+      <p class="home-hero-subtitle">
+        Upload a photo of a tomato leaf and our CNN model will identify the disease,
+        assess severity, and recommend treatment — in seconds.
+      </p>
+      <div class="home-hero-actions">
+        <a href="{{ url_for('detect') }}" class="btn btn-primary btn-lg">🔍 Start Detection</a>
+        <a href="{{ url_for('about') }}"  class="btn btn-outline btn-lg">Learn More</a>
+      </div>
+      <div class="home-hero-stats">
+        <div class="home-stat">
+          <span class="home-stat-value">10</span>
+          <span class="home-stat-label">Disease Classes</span>
+        </div>
+        <div class="home-stat-divider"></div>
+        <div class="home-stat">
+          <span class="home-stat-value">~93%</span>
+          <span class="home-stat-label">Accuracy</span>
+        </div>
+        <div class="home-stat-divider"></div>
+        <div class="home-stat">
+          <span class="home-stat-value">8,496</span>
+          <span class="home-stat-label">Training Images</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-hero-visual" aria-hidden="true">
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <div class="hero-card-leaf">🍃</div>
+          <div class="hero-card-scanning">
+            <div class="hero-scan-line"></div>
+          </div>
+        </div>
+        <div class="hero-card-body">
+          <div class="hero-card-skeleton"></div>
+          <div class="hero-card-skeleton short"></div>
+        </div>
+        <div class="hero-card-result">
+          <div class="hero-result-dot"></div>
+          <div>
+            <div class="hero-result-label">Detected Disease</div>
+            <div class="hero-result-name">Early Blight</div>
+          </div>
+          <div class="hero-result-conf">96.4%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ───────────────────────────────────────────────────────── -->
+<section class="home-section">
+  <div class="home-section-inner">
+    <div class="home-section-header">
+      <h2>How It Works</h2>
+      <p>Three simple steps to identify tomato leaf diseases</p>
+    </div>
+    <div class="home-steps">
+      <div class="home-step">
+        <div class="home-step-bubble">
+          <span class="home-step-icon">📷</span>
+          <span class="home-step-num">1</span>
+        </div>
+        <h3>Upload a Photo</h3>
+        <p>Take or upload a clear photo of the tomato leaf you want to analyze.</p>
+      </div>
+      <div class="home-step-connector" aria-hidden="true"></div>
+      <div class="home-step">
+        <div class="home-step-bubble">
+          <span class="home-step-icon">🧠</span>
+          <span class="home-step-num">2</span>
+        </div>
+        <h3>AI Analysis</h3>
+        <p>Our CNN model processes the image and classifies it across 10 disease categories.</p>
+      </div>
+      <div class="home-step-connector" aria-hidden="true"></div>
+      <div class="home-step">
+        <div class="home-step-bubble">
+          <span class="home-step-icon">💊</span>
+          <span class="home-step-num">3</span>
+        </div>
+        <h3>Get Results</h3>
+        <p>Receive the diagnosis, confidence score, severity level, and treatment advice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ───────────────────────────────────────────────────────────── -->
+<section class="home-section home-section-shaded">
+  <div class="home-section-inner">
+    <div class="home-section-header">
+      <h2>Why TomatoAI?</h2>
+      <p>Built for farmers, researchers, and agricultural workers</p>
+    </div>
+    <div class="home-features">
+      <div class="home-feature-card">
+        <div class="home-feature-icon">⚡</div>
+        <h3>Fast Detection</h3>
+        <p>Get results in under a second — no waiting, no manual inspection required.</p>
+      </div>
+      <div class="home-feature-card">
+        <div class="home-feature-icon">🎯</div>
+        <h3>High Accuracy</h3>
+        <p>~93% weighted accuracy across 10 classes, trained on the PlantVillage dataset.</p>
+      </div>
+      <div class="home-feature-card">
+        <div class="home-feature-icon">📋</div>
+        <h3>Treatment Advice</h3>
+        <p>Each diagnosis comes with a description and recommended treatment steps.</p>
+      </div>
+      <div class="home-feature-card">
+        <div class="home-feature-icon">📊</div>
+        <h3>Confidence Scores</h3>
+        <p>See the top predictions with confidence bars so you can trust the result.</p>
+      </div>
+      <div class="home-feature-card">
+        <div class="home-feature-icon">🌐</div>
+        <h3>Works in Browser</h3>
+        <p>No app to install. Upload from any device with a web browser.</p>
+      </div>
+      <div class="home-feature-card">
+        <div class="home-feature-icon">🔬</div>
+        <h3>CNN Architecture</h3>
+        <p>Custom CNN with MobileNetV2 transfer learning for robust classification.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Diseases Covered ───────────────────────────────────────────────────── -->
+<section class="home-section">
+  <div class="home-section-inner">
+    <div class="home-section-header">
+      <h2>Diseases Covered</h2>
+      <p>The model detects 9 diseases plus healthy leaves</p>
+    </div>
+    <div class="home-diseases">
+      <span class="home-disease-tag tag-healthy">✅ Healthy</span>
+      <span class="home-disease-tag tag-moderate">🟠 Early Blight</span>
+      <span class="home-disease-tag tag-high">🔴 Late Blight</span>
+      <span class="home-disease-tag tag-moderate">🟡 Leaf Mold</span>
+      <span class="home-disease-tag tag-moderate">🟠 Septoria Leaf Spot</span>
+      <span class="home-disease-tag tag-high">🔴 Spider Mites</span>
+      <span class="home-disease-tag tag-moderate">🟠 Target Spot</span>
+      <span class="home-disease-tag tag-high">🔴 Yellow Leaf Curl Virus</span>
+      <span class="home-disease-tag tag-moderate">🟠 Mosaic Virus</span>
+      <span class="home-disease-tag tag-high">🔴 Bacterial Spot</span>
+    </div>
+    <div class="home-section-cta">
+      <a href="{{ url_for('diseases') }}" class="btn btn-outline">View All Disease Details →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA Banner ─────────────────────────────────────────────────────────── -->
+<section class="home-cta-banner">
+  <div class="home-section-inner home-cta-inner">
+    <h2>Ready to detect a disease?</h2>
+    <p>Upload a tomato leaf photo and get an instant AI-powered diagnosis.</p>
+    <a href="{{ url_for('detect') }}" class="btn btn-white btn-lg">🔍 Try It Now</a>
+  </div>
+</section>
+
+{% endblock %}

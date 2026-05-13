@@ -1,0 +1,52 @@
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ─────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Dataset (large image files — keep only .gitkeep) ────────────────────────
+dataset/**
+!dataset/.gitkeep
+
+# ── Trained models & numpy artifacts (large binary files) ───────────────────
+models/*.h5
+models/*.hdf5
+models/*.keras
+models/*.npy
+models/*.npz
+# Keep class_names.json and .gitkeep
+!models/class_names.json
+!models/.gitkeep
+
+# ── Training logs ────────────────────────────────────────────────────────────
+logs/
+
+# ── Uploaded images (runtime uploads) ───────────────────────────────────────
+static/uploads/*
+!static/uploads/.gitkeep
+
+# ── Jupyter checkpoints ──────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── OS / editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ── Environment variables ────────────────────────────────────────────────────
+.env
+.env.*

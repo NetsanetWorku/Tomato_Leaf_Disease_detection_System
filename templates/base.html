@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Tomato Disease Detector{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="nav-brand">
+        <span class="brand-icon">🍅</span>
+        <span class="brand-text">TomatoAI</span>
+      </a>
+
+      <!-- Hamburger (mobile) -->
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('home') }}"     class="nav-link {% if request.endpoint == 'home'     %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('detect') }}"   class="nav-link {% if request.endpoint == 'detect'   %}active{% endif %}">Detect</a></li>
+        <li><a href="{{ url_for('diseases') }}" class="nav-link {% if request.endpoint == 'diseases' %}active{% endif %}">Diseases</a></li>
+        <li><a href="{{ url_for('about') }}"    class="nav-link {% if request.endpoint == 'about'    %}active{% endif %}">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content {% block main_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>🍅 <strong>TomatoAI</strong> — AI-Based Tomato Leaf Disease Detection System</p>
+      <p class="footer-sub">Madda Walabu University &bull; CNN &amp; Deep Learning &bull; PlantVillage Dataset</p>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+
+  <script>
+    // Mobile nav toggle
+    document.getElementById('navToggle').addEventListener('click', function () {
+      document.getElementById('navLinks').classList.toggle('open');
+      this.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

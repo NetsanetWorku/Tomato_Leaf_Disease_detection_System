@@ -1,0 +1,5 @@
+# Place PlantVillage tomato class folders here.
+# Each subfolder should be named after the disease class, e.g.:
+#   Tomato_healthy/
+#   Tomato_Early_blight/
+#   ...

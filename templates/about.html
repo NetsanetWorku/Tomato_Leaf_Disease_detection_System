@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}About — Tomato Disease Detector{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="page-header">
+    <h1>About This Project</h1>
+    <p class="page-subtitle">AI-Based Tomato Leaf Disease Detection System Using CNN</p>
+  </div>
+
+  <div class="about-grid">
+
+    <div class="card">
+      <h2>🎯 Project Overview</h2>
+      <p>
+        This system uses a Convolutional Neural Network (CNN) trained on the PlantVillage dataset
+        to automatically detect and classify tomato leaf diseases from digital images.
+        It was developed as an AI project at <strong>Madda Walabu University, College of Computing</strong>.
+      </p>
+      <p>
+        The goal is to provide farmers and agricultural workers with an accessible, fast, and accurate
+        tool for early disease detection — without requiring expert agricultural knowledge.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>🧠 Model Architecture</h2>
+      <ul class="info-list">
+        <li><strong>Type:</strong> Custom CNN + MobileNetV2 Transfer Learning</li>
+        <li><strong>Input:</strong> 128 × 128 × 3 RGB images</li>
+        <li><strong>Output:</strong> 10-class Softmax classification</li>
+        <li><strong>Layers:</strong> Conv2D, BatchNorm, MaxPool, Dropout, Dense</li>
+        <li><strong>Optimizer:</strong> Adam (lr = 0.001)</li>
+        <li><strong>Loss:</strong> Categorical Cross-Entropy</li>
+        <li><strong>Expected Accuracy:</strong> ~93%</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>📊 Dataset</h2>
+      <ul class="info-list">
+        <li><strong>Source:</strong> PlantVillage Dataset</li>
+        <li><strong>Total Images:</strong> 8,496</li>
+        <li><strong>Classes:</strong> 10 (1 healthy + 9 diseased)</li>
+        <li><strong>Split:</strong> 70% Train / 15% Validation / 15% Test</li>
+        <li><strong>Augmentation:</strong> Flip, Rotation, Zoom, Brightness</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>🛠️ Technologies Used</h2>
+      <div class="tech-grid">
+        <span class="tech-tag">Python 3.x</span>
+        <span class="tech-tag">TensorFlow / Keras</span>
+        <span class="tech-tag">OpenCV</span>
+        <span class="tech-tag">NumPy</span>
+        <span class="tech-tag">Scikit-learn</span>
+        <span class="tech-tag">Flask</span>
+        <span class="tech-tag">Matplotlib</span>
+        <span class="tech-tag">Seaborn</span>
+        <span class="tech-tag">Google Colab</span>
+        <span class="tech-tag">PlantVillage</span>
+      </div>
+    </div>
+
+    <div class="card team-card">
+      <h2>👥 Team</h2>
+      <section class="team-section">
+
+        <!-- Canvas draws the connecting lines behind the members -->
+        <canvas id="teamCanvas" class="team-canvas"></canvas>
+
+        <div class="team-layout" id="teamLayout">
+
+          <!-- TOP: Melese Buzuneh -->
+          <div class="team-node team-top" id="tm-top">
+            <div class="team-photo-wrap">
+              <img src="{{ url_for('static', filename='images/team/melese.jpg') }}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                   alt="Melese Buzuneh" class="team-photo"/>
+              <div class="team-fallback">👤</div>
+            </div>
+            <span class="team-name">Melese Buzuneh</span>
+          </div>
+
+          <!-- LEFT: Mieso Haji -->
+          <div class="team-node team-left" id="tm-left">
+            <div class="team-photo-wrap">
+              <img src="{{ url_for('static', filename='images/team/mieso.jpg') }}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                   alt="Mieso Haji" class="team-photo"/>
+              <div class="team-fallback">👤</div>
+            </div>
+            <span class="team-name">Mieso Haji</span>
+          </div>
+
+          <!-- CENTER: Netsanet Worku -->
+          <div class="team-node team-center" id="tm-center">
+            <div class="team-photo-wrap team-photo-wrap-center">
+              <img src="{{ url_for('static', filename='images/team/netsanet.jpg') }}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                   alt="Netsanet Worku" class="team-photo"/>
+              <div class="team-fallback">⭐</div>
+            </div>
+            <span class="team-name">Netsanet Worku</span>
+          </div>
+
+          <!-- RIGHT: Mekides Enkuhone -->
+          <div class="team-node team-right" id="tm-right">
+            <div class="team-photo-wrap">
+              <img src="{{ url_for('static', filename='images/team/mekides.jpg') }}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                   alt="Mekides Enkuhone" class="team-photo"/>
+              <div class="team-fallback">👤</div>
+            </div>
+            <span class="team-name">Mekides Enkuhone</span>
+          </div>
+
+          <!-- BOTTOM: Alem Bedhaso -->
+          <div class="team-node team-bottom" id="tm-bottom">
+            <div class="team-photo-wrap">
+              <img src="{{ url_for('static', filename='images/team/alem.jpg') }}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                   alt="Alem Bedhaso" class="team-photo"/>
+              <div class="team-fallback">👤</div>
+            </div>
+            <span class="team-name">Alem Bedhaso</span>
+          </div>
+
+        </div><!-- /.team-layout -->
+      </section>
+      <p class="supervisor"><b>Supervisor</b> <strong>Mr. Shume Berhanu</strong></p>
+    </div>
+
+    <div class="card">
+      <h2>📈 Expected Performance</h2>
+      <table class="metrics-table">
+        <thead>
+          <tr><th>Disease</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Healthy</td><td>~0.97</td><td>~0.98</td><td>~0.97</td></tr>
+          <tr><td>Early Blight</td><td>~0.94</td><td>~0.93</td><td>~0.93</td></tr>
+          <tr><td>Late Blight</td><td>~0.93</td><td>~0.92</td><td>~0.92</td></tr>
+          <tr><td>Leaf Mold</td><td>~0.95</td><td>~0.94</td><td>~0.94</td></tr>
+          <tr><td>Septoria Leaf Spot</td><td>~0.92</td><td>~0.91</td><td>~0.91</td></tr>
+          <tr><td>Spider Mites</td><td>~0.91</td><td>~0.90</td><td>~0.90</td></tr>
+          <tr><td>Target Spot</td><td>~0.90</td><td>~0.91</td><td>~0.90</td></tr>
+          <tr><td>Yellow Leaf Curl Virus</td><td>~0.96</td><td>~0.95</td><td>~0.95</td></tr>
+          <tr><td>Mosaic Virus</td><td>~0.88</td><td>~0.87</td><td>~0.87</td></tr>
+          <tr><td>Bacterial Spot</td><td>~0.91</td><td>~0.90</td><td>~0.90</td></tr>
+          <tr class="total-row"><td><strong>Weighted Avg</strong></td><td><strong>~0.93</strong></td><td><strong>~0.93</strong></td><td><strong>~0.93</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function drawTeamLines() {
+    const layout = document.getElementById('teamLayout');
+    const canvas = document.getElementById('teamCanvas');
+    const center = document.getElementById('tm-center');
+    const nodes  = ['tm-top','tm-left','tm-right','tm-bottom'].map(id => document.getElementById(id));
+
+    if (!layout || !canvas || !center) return;
+
+    const rect = layout.getBoundingClientRect();
+    canvas.width  = rect.width;
+    canvas.height = rect.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const cr = center.getBoundingClientRect();
+    const cx = cr.left - rect.left + cr.width  / 2;
+    const cy = cr.top  - rect.top  + cr.height / 2;
+
+    ctx.strokeStyle = '#16a34a';
+    ctx.lineWidth   = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.globalAlpha = 0.6;
+
+    nodes.forEach(node => {
+      const nr = node.getBoundingClientRect();
+      const nx = nr.left - rect.left + nr.width  / 2;
+      const ny = nr.top  - rect.top  + nr.height / 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(nx, ny);
+      ctx.stroke();
+    });
+  }
+
+  window.addEventListener('load',   drawTeamLines);
+  window.addEventListener('resize', drawTeamLines);
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Detect Disease — TomatoAI{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="detect-header">
+  <h1 class="detect-title">🔍 Detect Leaf Disease</h1>
+  <p class="detect-subtitle">Upload a tomato leaf photo and get an instant AI diagnosis.</p>
+</div>
+
+<!-- Upload Section -->
+<section class="upload-section">
+  <div class="card upload-card">
+    <h2 class="card-title">Upload Tomato Leaf Image</h2>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" id="dropZone">
+      <div class="drop-zone-content" id="dropContent">
+        <div class="drop-icon">📷</div>
+        <p class="drop-text">Drag &amp; drop your image here</p>
+        <p class="drop-subtext">or</p>
+        <label for="fileInput" class="btn btn-primary">Choose Image</label>
+        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.bmp,.webp" hidden />
+        <p class="drop-hint">Supported: JPG, PNG, BMP, WebP &bull; Max 10 MB</p>
+      </div>
+
+      <!-- Image Preview -->
+      <div class="preview-container" id="previewContainer" style="display:none;">
+        <img id="previewImage" src="" alt="Preview" class="preview-image" />
+        <div class="preview-actions">
+          <button class="btn btn-secondary" id="changeImageBtn">↩ Change Image</button>
+          <button class="btn btn-primary"   id="detectBtn">
+            <span id="detectBtnText">🔍 Detect Disease</span>
+            <span id="detectBtnSpinner" class="spinner" style="display:none;"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Result Section -->
+<section class="result-section" id="resultSection" style="display:none;">
+  <div class="card result-card">
+    <h2 class="card-title">Detection Result</h2>
+
+    <div class="result-grid">
+      <!-- Uploaded Image -->
+      <div class="result-image-wrap">
+        <img id="resultImage" src="" alt="Analyzed leaf" class="result-image" />
+      </div>
+
+      <!-- Prediction Details -->
+      <div class="result-details">
+        <div class="result-header">
+          <span class="result-label">Detected Disease</span>
+          <h3 class="result-disease" id="resultDisease">—</h3>
+          <div class="result-meta">
+            <span class="confidence-badge" id="confidenceBadge">—</span>
+            <span class="severity-badge"   id="severityBadge">—</span>
+          </div>
+        </div>
+
+        <div class="result-info">
+          <div class="info-block">
+            <h4>Description</h4>
+            <p id="resultDescription">—</p>
+          </div>
+          <div class="info-block">
+            <h4>Recommended Treatment</h4>
+            <p id="resultTreatment">—</p>
+          </div>
+        </div>
+
+        <!-- Top-3 Predictions -->
+        <div class="top3-section">
+          <h4>Top Predictions</h4>
+          <div id="top3Bars"></div>
+        </div>
+
+        <button class="btn btn-secondary btn-full" id="tryAnotherBtn">
+          🔄 Try Another Image
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Error Toast -->
+<div class="error-toast" id="errorToast" style="display:none;">
+  <span class="error-icon">⚠️</span>
+  <span id="errorMessage">An error occurred.</span>
+  <button class="toast-close" id="toastClose">✕</button>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
