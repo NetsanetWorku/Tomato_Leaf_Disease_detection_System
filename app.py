@@ -6,6 +6,7 @@ AI-Based Tomato Leaf Disease Detection System
 import os
 import uuid
 import json
+import gdown
 from flask import Flask, render_template, request, jsonify, url_for
 from werkzeug.utils import secure_filename
 import tensorflow as tf
@@ -16,13 +17,41 @@ from src.predict import predict, load_model, load_class_names, DISEASE_INFO
 # ─── App Configuration ────────────────────────────────────────────────────────
 
 app = Flask(__name__)
-app.config["SECRET_KEY"]       = "tomato-disease-detection-2024"
-app.config["UPLOAD_FOLDER"]    = os.path.join("static", "uploads")
+app.config["SECRET_KEY"]         = os.environ.get("SECRET_KEY", "tomato-disease-detection-2024")
+app.config["UPLOAD_FOLDER"]      = os.path.join("static", "uploads")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024   # 10 MB limit
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "bmp", "webp"}
 MODELS_DIR   = "models"
 MODEL_FILE   = "custom_cnn_best.h5"
+
+# Google Drive file ID for the trained model.
+# Set the GDRIVE_MODEL_ID environment variable on Render (or any host),
+# or hard-code it here after uploading the model to Google Drive.
+GDRIVE_MODEL_ID = os.environ.get("GDRIVE_MODEL_ID", "")
+
+# ─── Model Download ───────────────────────────────────────────────────────────
+
+def download_model_if_missing():
+    """Download the trained model from Google Drive if not present locally."""
+    model_path = os.path.join(MODELS_DIR, MODEL_FILE)
+    if os.path.exists(model_path):
+        print(f"Model already present: {model_path}")
+        return
+
+    if not GDRIVE_MODEL_ID:
+        print("WARNING: GDRIVE_MODEL_ID not set. Skipping model download.")
+        return
+
+    print(f"Model not found locally. Downloading from Google Drive (id={GDRIVE_MODEL_ID})...")
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    url = f"https://drive.google.com/uc?id={GDRIVE_MODEL_ID}"
+    try:
+        gdown.download(url, model_path, quiet=False, fuzzy=True)
+        print("Model downloaded successfully.")
+    except Exception as e:
+        print(f"ERROR: Failed to download model: {e}")
+
 
 # ─── Load Model at Startup ────────────────────────────────────────────────────
 
@@ -30,8 +59,9 @@ model       = None
 class_names = None
 
 def load_resources():
-    """Load model and class names once at startup."""
+    """Download (if needed) and load model + class names once at startup."""
     global model, class_names
+    download_model_if_missing()
     model_path = os.path.join(MODELS_DIR, MODEL_FILE)
     if os.path.exists(model_path):
         print(f"Loading model: {model_path}")
@@ -39,7 +69,7 @@ def load_resources():
         class_names = load_class_names(MODELS_DIR)
         print(f"Model loaded. Classes: {len(class_names)}")
     else:
-        print(f"WARNING: Model not found at {model_path}. Train the model first.")
+        print("WARNING: Model not found. Train the model or set GDRIVE_MODEL_ID.")
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -75,7 +105,6 @@ def predict_route():
     """
     ensure_upload_dir()
 
-    # Validate request
     if "image" not in request.files:
         return jsonify({"error": "No image file provided."}), 400
 
@@ -85,11 +114,9 @@ def predict_route():
     if not allowed_file(file.filename):
         return jsonify({"error": "Invalid file type. Please upload JPG, PNG, or BMP."}), 400
 
-    # Check model is loaded
     if model is None:
-        return jsonify({"error": "Model not loaded. Please train the model first."}), 503
+        return jsonify({"error": "Model not loaded. Please check server configuration."}), 503
 
-    # Save uploaded file with unique name
     ext      = file.filename.rsplit(".", 1)[1].lower()
     filename = f"{uuid.uuid4().hex}.{ext}"
     filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
@@ -107,7 +134,6 @@ def predict_route():
         return jsonify(result)
 
     except Exception as e:
-        # Clean up on error
         if os.path.exists(filepath):
             os.remove(filepath)
         return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
@@ -115,19 +141,16 @@ def predict_route():
 
 @app.route("/about")
 def about():
-    """About page with project information."""
     return render_template("about.html")
 
 
 @app.route("/diseases")
 def diseases():
-    """Disease reference page."""
     return render_template("diseases.html", diseases=DISEASE_INFO)
 
 
 @app.route("/health")
 def health():
-    """Health check endpoint."""
     return jsonify({
         "status":       "ok",
         "model_loaded": model is not None,
@@ -135,8 +158,10 @@ def health():
     })
 
 
-# ─── Main ─────────────────────────────────────────────────────────────────────
+# ─── Startup ──────────────────────────────────────────────────────────────────
+
+# Load resources when the module is imported (covers gunicorn workers too)
+load_resources()
 
 if __name__ == "__main__":
-    load_resources()
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
