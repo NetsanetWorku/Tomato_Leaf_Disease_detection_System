@@ -5,10 +5,7 @@ AI-Based Tomato Leaf Disease Detection System
 
 import os
 import uuid
-import json
-import gdown
 from flask import Flask, render_template, request, jsonify, url_for
-from werkzeug.utils import secure_filename
 import tensorflow as tf
 import numpy as np
 
@@ -22,34 +19,8 @@ app.config["UPLOAD_FOLDER"]      = os.path.join("static", "uploads")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024   # 10 MB limit
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "bmp", "webp"}
-MODELS_DIR   = "models"
-MODEL_FILE   = "custom_cnn_best.h5"
-
-# Google Drive file ID for the trained model.
-GDRIVE_MODEL_ID = os.environ.get("GDRIVE_MODEL_ID", "1V0vTuJDdhSpS4oNbRDRwFgS2--tValzn")
-
-# ─── Model Download ───────────────────────────────────────────────────────────
-
-def download_model_if_missing():
-    """Download the trained model from Google Drive if not present locally."""
-    model_path = os.path.join(MODELS_DIR, MODEL_FILE)
-    if os.path.exists(model_path):
-        print(f"Model already present: {model_path}")
-        return
-
-    if not GDRIVE_MODEL_ID:
-        print("WARNING: GDRIVE_MODEL_ID not set. Skipping model download.")
-        return
-
-    print(f"Model not found locally. Downloading from Google Drive (id={GDRIVE_MODEL_ID})...")
-    os.makedirs(MODELS_DIR, exist_ok=True)
-    url = f"https://drive.google.com/uc?id={GDRIVE_MODEL_ID}&export=download"
-    try:
-        gdown.download(url, model_path, quiet=False, fuzzy=True)
-        print("Model downloaded successfully.")
-    except Exception as e:
-        print(f"ERROR: Failed to download model: {e}")
-
+MODELS_DIR = "models"
+MODEL_FILE = "custom_cnn_best.h5"
 
 # ─── Load Model at Startup ────────────────────────────────────────────────────
 
@@ -57,9 +28,8 @@ model       = None
 class_names = None
 
 def load_resources():
-    """Download (if needed) and load model + class names once at startup."""
+    """Load model and class names once at startup."""
     global model, class_names
-    download_model_if_missing()
     model_path = os.path.join(MODELS_DIR, MODEL_FILE)
     if os.path.exists(model_path):
         print(f"Loading model: {model_path}")
@@ -67,7 +37,7 @@ def load_resources():
         class_names = load_class_names(MODELS_DIR)
         print(f"Model loaded. Classes: {len(class_names)}")
     else:
-        print("WARNING: Model not found. Train the model or set GDRIVE_MODEL_ID.")
+        print(f"WARNING: Model not found at {model_path}.")
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -84,23 +54,16 @@ def ensure_upload_dir():
 
 @app.route("/")
 def home():
-    """Landing home page."""
     return render_template("home.html")
 
 
 @app.route("/detect")
 def detect():
-    """Detection page with upload form."""
     return render_template("index.html")
 
 
 @app.route("/predict", methods=["POST"])
 def predict_route():
-    """
-    Handle image upload and return prediction result.
-    Accepts multipart/form-data with field 'image'.
-    Returns JSON with prediction details.
-    """
     ensure_upload_dir()
 
     if "image" not in request.files:
@@ -158,8 +121,8 @@ def health():
 
 # ─── Startup ──────────────────────────────────────────────────────────────────
 
-# Load resources when the module is imported (covers gunicorn workers too)
 load_resources()
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    port = int(os.environ.get("PORT", 7860))
+    app.run(debug=False, host="0.0.0.0", port=port)

@@ -21,6 +21,7 @@ dataset/**
 !dataset/.gitkeep
 
 # ── Trained models & numpy artifacts (large binary files) ───────────────────
+# NOTE: Upload models/custom_cnn_best.h5 directly to Hugging Face Space
 models/*.h5
 models/*.hdf5
 models/*.keras
